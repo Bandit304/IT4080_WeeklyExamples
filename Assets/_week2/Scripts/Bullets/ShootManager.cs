@@ -38,10 +38,14 @@ namespace _week2.Scripts.Bullets
                 // {
                     if (playerInput.ValueRO.shoot.IsSet)
                     {
-                        Debug.LogWarning("Shoot Input");
+                        // Debug.LogWarning("Shoot Input");
                         Entity bulletEntity = ecb.Instantiate(prefab);
                         LocalTransform bulletLocalTransform = SystemAPI.GetComponent<LocalTransform>(prefab);
-                        bulletLocalTransform.Position = localTransform.ValueRO.Position;
+
+                        int bulletOffset = 3;
+                        var forwardDir = math.mul(localTransform.ValueRO.Rotation, Vector3.forward);
+
+                        bulletLocalTransform.Position = localTransform.ValueRO.Position + forwardDir * bulletOffset;
                         bulletLocalTransform.Rotation = localTransform.ValueRO.Rotation;
                         // var bulletLocalTransform = LocalTransform.FromPositionRotation(
                         //     localTransform.ValueRO.Position,
