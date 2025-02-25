@@ -7,7 +7,7 @@ using _week2.Scripts;
 using Unity.Transforms;
 using Unity.Mathematics;
 
-namespace Unity.Multiplayer.Center.NetcodeForEntitiesSetup
+namespace Unity.Multiplayer.Center.NetcodeForEntitiesExample
 {
     /// <summary>
     /// This allows sending RPCs between a standalone build and the editor for testing purposes in the event when you
