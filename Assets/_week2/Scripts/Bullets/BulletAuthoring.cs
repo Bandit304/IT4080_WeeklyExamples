@@ -1,7 +1,7 @@
 using Unity.Entities;
 using UnityEngine;
     
-namespace _week2.Scripts.Bullets
+namespace IT4080C
 {
     /// <summary>
     /// Flag component to mark an entity as a Bullet.
@@ -9,6 +9,8 @@ namespace _week2.Scripts.Bullets
     public struct Bullet : IComponentData
     {
         public float timer;
+        public byte hasHit;
+        public bool hittable;
     }
 
     /// <summary>
@@ -24,7 +26,9 @@ namespace _week2.Scripts.Bullets
                 var entity = GetEntity(TransformUsageFlags.Dynamic);
                 AddComponent<Bullet>(entity, new Bullet
                 {
-                    timer = 5f
+                    timer = 5f,
+                    hasHit = 0,
+                    hittable = false
                 });
             }
         }

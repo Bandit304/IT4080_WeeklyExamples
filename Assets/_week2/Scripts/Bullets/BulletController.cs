@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using Unity.NetCode;
 using Unity.Transforms;
 using UnityEngine;
+using IT4080C;
 
 namespace _week2.Scripts.Bullets
 {
@@ -40,6 +41,10 @@ namespace _week2.Scripts.Bullets
                     if(bullet.ValueRW.timer <= 0f )
                     {
                         ecb.DestroyEntity(entity);
+                    }
+                    else if (bullet.ValueRW.timer <= 4f)
+                    {
+                        bullet.ValueRW.hittable = true;
                     }
                 }
             }

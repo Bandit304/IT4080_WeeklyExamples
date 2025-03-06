@@ -20,8 +20,8 @@ partial struct CollisionHandler : ISystem
     {
         CollisionSimulationJob simulationJob = new CollisionSimulationJob
         {
-            PlayerHealthLookup = SystemAPI.GetComponentLookup<Health>(),
-
+            PlayerHealthLookup = SystemAPI.GetComponentLookup<HealthComponent>(),
+            BulletLookup = SystemAPI.GetComponentLookup<Bullet>(),
         };
         state.Dependency = simulationJob.Schedule(
             SystemAPI.GetSingleton<SimulationSingleton>(), state.Dependency);
@@ -40,15 +40,31 @@ partial struct CollisionHandler : ISystem
 [BurstCompile]
 public partial struct CollisionSimulationJob : ICollisionEventsJob
 {
-    public ComponentLookup<Health> PlayerHealthLookup;
+    public ComponentLookup<HealthComponent> PlayerHealthLookup;
+    public ComponentLookup<Bullet> BulletLookup;
 
     public void Execute(CollisionEvent collisionEvent)
     {
-        if(PlayerHealthLookup.TryGetComponent(collisionEvent.EntityB, out Health health))
+        if(PlayerHealthLookup.TryGetComponent(collisionEvent.EntityB, out HealthComponent health))
         {
-            health.currentHealth -= 1f;
+
+            health.CurrentHealth -= 1f;
             PlayerHealthLookup[collisionEvent.EntityB] = health;
-            Debug.Log("Owww My health is: "+health.currentHealth);
+            Debug.Log("Owww My health is: "+health.CurrentHealth);
+
+
+
+        }
+        if (BulletLookup.TryGetComponent(collisionEvent.EntityA, out Bullet bullet))
+        {
+            if (bullet.hasHit != 1 && bullet.hittable)
+            {
+                Debug.LogWarning("Collision Bullet Part ");
+                bullet.hasHit = 1;
+                bullet.timer = 0;
+                bullet.hittable = false;
+                BulletLookup[collisionEvent.EntityA] = bullet;
+            }
         }
     }
 }
