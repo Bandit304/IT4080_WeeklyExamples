@@ -139,6 +139,7 @@ namespace Unity.Multiplayer.Center.NetcodeForEntitiesExample
 
                 // Add the player to the linked entity group so it is destroyed automatically on disconnect
                 commandBuffer.AppendToBuffer(reqSrc.ValueRO.SourceConnection, new LinkedEntityGroup {Value = player});
+                commandBuffer.SetComponent(player, new HealthComponent { CurrentHealth = 100f, MaxHealth = 100f, ownerNetworkID = networkId.Value});
 
                 commandBuffer.DestroyEntity(reqEntity);
             }

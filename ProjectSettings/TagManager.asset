@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 3
   tags:
   - UIManager
+  - UIScoreManager
   layers:
   - Default
   - TransparentFX

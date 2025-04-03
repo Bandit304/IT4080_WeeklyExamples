@@ -4,6 +4,7 @@ using Unity.Mathematics;
 using Unity.NetCode;
 using Unity.Transforms;
 using UnityEngine;
+using IT4080C;
 
 namespace _week2.Scripts.Bullets
 {
@@ -24,15 +25,18 @@ namespace _week2.Scripts.Bullets
             var prefab = SystemAPI.GetSingleton<BulletSpawner>().Bullet;
 
             EntityCommandBuffer ecb = new EntityCommandBuffer(Unity.Collections.Allocator.Temp);
+            // NetworkTime networkTime = SystemAPI.GetSingleton<NetworkTime>();
 
             foreach ((
                 var playerInput,
                 var localTransform,
-                var ghostOwner)
+                var ghostOwner,
+                var poweredUpComp)
                 in SystemAPI.Query<
                 RefRO<CubeInput>,
                 RefRO<LocalTransform>,
-                RefRO<GhostOwner>>().WithAll<Simulate>())
+                RefRO<GhostOwner>,
+                RefRO<PoweredUpComponent>>().WithAll<Simulate>())
             {
                 // if (networkTime.IsFirstTimeFullyPredictingTick)
                 // {
@@ -51,6 +55,18 @@ namespace _week2.Scripts.Bullets
                         //     localTransform.ValueRO.Position,
                         //     localTransform.ValueRO.Rotation
                         // );
+ 
+                        ecb.SetComponent(
+                            bulletEntity,
+                            new Bullet
+                            {
+                                hasHit = 0,
+                                hittable = false,
+                                ownerNetworkID = ghostOwner.ValueRO.NetworkId,
+                                timer = 5f,
+                                damageMult = poweredUpComp.ValueRO.poweredUpMultiplier
+                            }
+                        );
                         ecb.SetComponent(bulletEntity, bulletLocalTransform);
                         ecb.SetComponent(bulletEntity, new GhostOwner { NetworkId = ghostOwner.ValueRO.NetworkId });
                     }

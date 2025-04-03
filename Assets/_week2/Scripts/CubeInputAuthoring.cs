@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Unity.Burst;
 using Unity.Entities;
 using Unity.Mathematics;
@@ -165,6 +166,37 @@ namespace _week2.Scripts
 
                     MainGameObjectCamera.Instance.transform.SetPositionAndRotation(camPos, trans.ValueRO.Rotation);
                     MainGameObjectCamera.Instance.fieldOfView = 75;
+                }
+            }
+
+            //check if dead and respawn
+            foreach ((RefRW<HealthComponent> playerHealth,
+                      RefRW<LocalTransform> playerPosition)
+                        in
+                    SystemAPI.Query<
+                        RefRW<HealthComponent>,
+                        RefRW<LocalTransform>>()
+                    .WithAll<HealthComponent>()
+                    .WithAll<Simulate>())
+            {
+                if (playerHealth.ValueRO.CurrentHealth <= 0)
+                {
+                    List<LocalTransform> localTrans = new List<LocalTransform>();
+                    foreach (var spawnTrans in
+                    SystemAPI.Query<RefRW<LocalTransform>>()
+                    .WithAll<SpawnPoint>()
+                    .WithAll<Simulate>())
+                    {
+                        Debug.Log("SPpoint found " + spawnTrans.ValueRW.Position.x);
+                        localTrans.Add(spawnTrans.ValueRW);
+                    }
+                    //adjust y offset
+                    LocalTransform tempTransform = localTrans[UnityEngine.Random.Range(0, localTrans.Count - 1)];
+                    tempTransform.Position.y += 2f;
+                    tempTransform.Position.z += -2.456f;
+
+                    playerPosition.ValueRW.Position = tempTransform.Position;
+                    playerHealth.ValueRW.CurrentHealth = playerHealth.ValueRO.MaxHealth;
                 }
             }
         }

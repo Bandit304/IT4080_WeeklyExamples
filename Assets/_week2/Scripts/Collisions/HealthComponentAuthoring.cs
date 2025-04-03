@@ -8,6 +8,9 @@ public struct HealthComponent : IComponentData
 {
     [GhostField] public float CurrentHealth;
     [GhostField] public float MaxHealth;
+    [GhostField] public float ownerNetworkID;
+    [GhostField] public int kills;
+    [GhostField] public int deaths;
 }
 
 [DisallowMultipleComponent]
@@ -21,7 +24,11 @@ public class HealthComponentAuthoring : MonoBehaviour
             var entity = GetEntity(TransformUsageFlags.Dynamic);
             AddComponent<HealthComponent>(entity, new HealthComponent
             {
-                CurrentHealth = 100f
+                CurrentHealth = 100f,
+                MaxHealth = 100f,
+                ownerNetworkID = 999f,
+                kills = 0,
+                deaths = 0
             });
 
 

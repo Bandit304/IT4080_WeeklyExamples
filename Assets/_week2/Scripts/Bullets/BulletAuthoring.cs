@@ -11,6 +11,10 @@ namespace IT4080C
         public float timer;
         public byte hasHit;
         public bool hittable;
+        public float ownerNetworkID;
+        public float damageMult;
+        public float hitPlayerNetworkID;
+        internal bool killed;
     }
 
     /// <summary>
@@ -28,7 +32,11 @@ namespace IT4080C
                 {
                     timer = 5f,
                     hasHit = 0,
-                    hittable = false
+                    hittable = false,
+                    ownerNetworkID = -999f,
+                    damageMult = 1f,
+                    hitPlayerNetworkID = 999f,
+                    killed = false
                 });
             }
         }

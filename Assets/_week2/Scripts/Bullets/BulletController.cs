@@ -5,6 +5,7 @@ using Unity.NetCode;
 using Unity.Transforms;
 using UnityEngine;
 using IT4080C;
+using System.Collections.Generic;
 
 namespace _week2.Scripts.Bullets
 {
@@ -37,6 +38,31 @@ namespace _week2.Scripts.Bullets
 
                 if(state.World.IsServer())
                 {
+                    //add kills
+                    if (bullet.ValueRO.hitPlayerNetworkID <= 5)
+                    {
+                        List<HealthComponent> entities = new List<HealthComponent>();
+
+                        foreach ((
+                             RefRW<HealthComponent> healthComponent,
+                             Entity playerEntity)
+                                in SystemAPI.Query<
+                            RefRW<HealthComponent>>()
+                            .WithEntityAccess().WithAll<Simulate>())
+                        {
+                            if (healthComponent.ValueRO.ownerNetworkID == bullet.ValueRO.ownerNetworkID && bullet.ValueRO.killed)
+                            {
+                                healthComponent.ValueRW.kills += 1;
+
+                            }
+                            if (healthComponent.ValueRO.ownerNetworkID == bullet.ValueRO.hitPlayerNetworkID && healthComponent.ValueRO.CurrentHealth <= 0)
+                            {
+                                Debug.Log("Player " + bullet.ValueRO.ownerNetworkID + " killed " + bullet.ValueRO.hitPlayerNetworkID);
+                                healthComponent.ValueRW.deaths += 1;
+                            }
+                        }
+                    }
+
                     bullet.ValueRW.timer -= SystemAPI.Time.DeltaTime;
                     if(bullet.ValueRW.timer <= 0f )
                     {
