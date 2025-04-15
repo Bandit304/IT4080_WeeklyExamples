@@ -3320,6 +3320,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1398298018}
   - component: {fileID: 1398298019}
+  - component: {fileID: 1398298020}
   m_Layer: 0
   m_Name: ScoreboardUI
   m_TagString: UIScoreManager
@@ -3361,6 +3362,19 @@ MonoBehaviour:
   m_WorldSpaceSizeMode: 1
   m_WorldSpaceWidth: 1920
   m_WorldSpaceHeight: 1080
+--- !u!114 &1398298020
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1398298017}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb8f1e80d1577094aae5883116bca3db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  uiDocument: {fileID: 1398298019}
 --- !u!1 &1401370385
 GameObject:
   m_ObjectHideFlags: 0

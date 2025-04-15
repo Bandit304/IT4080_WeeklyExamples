@@ -4,6 +4,7 @@ using Unity.NetCode;
 using UnityEngine.UIElements;
 using UnityEngine;
 using System.Collections.Generic;
+using Unity.Entities.UniversalDelegates;
 
 partial class ScoreBoardSystem : SystemBase
 {
@@ -19,12 +20,27 @@ partial class ScoreBoardSystem : SystemBase
         ghostQuery = GetEntityQuery(typeof(GhostInstance), typeof(HealthComponent));
 
         // Find UIDocument in scene
-        uiObject = GameObject.FindWithTag("UIManager");
-        if (uiObject != null)
+        base.OnCreate();
+    }
+
+    protected override void OnUpdate()
+    {
+        if (uiObject == null)
         {
-            Debug.Log("Found Score UIManager");
+            Debug.LogWarning("No UIManager, searching");
+            uiObject = GameObject.FindWithTag("UIScoreManager");
+        }
+        if (uiObject != null && uiDocument == null)
+        {
+            // Debug.Log("UIManager found, searching for UIdoc");
             uiDocument = uiObject.GetComponent<UIDocument>();
+
+        }
+        if (uiObject != null && uiDocument != null && scoreboard == null)
+        {
+            // Debug.Log("Found UIDoc, searching for HealthSlider!");
             scoreboard = uiDocument.rootVisualElement.Q<MultiColumnListView>("ScoreboardMultiColListView");
+            scoreboard.columns.Clear();
             scoreboard.columns.Add(new Column()
             {
                 title = "PlayerName",
@@ -46,32 +62,7 @@ partial class ScoreBoardSystem : SystemBase
                 bindCell = BindKillsToCell,
                 stretchable = true,
             });
-        }
-        else
-        {
-            Debug.Log("No Score UIManager");
-        }
-        base.OnCreate();
-    }
-
-    protected override void OnUpdate()
-    {
-        if (uiObject == null)
-        {
-            // Debug.Log("No UIManager, searching");
-            uiObject = GameObject.FindWithTag("UIScoreManager");
-
-        }
-        else if (uiObject != null && uiDocument == null)
-        {
-            // Debug.Log("UIManager found, searching for UIdoc");
-            uiDocument = uiObject.GetComponent<UIDocument>();
-
-        }
-        else if (uiObject != null && uiDocument != null && scoreboard == null)
-        {
-            // Debug.Log("Found UIDoc, searching for HealthSlider!");
-            scoreboard = uiDocument.rootVisualElement.Q<MultiColumnListView>("ScoreboardMultiColListView");
+            scoreboard.Rebuild();
 
             return;
         }

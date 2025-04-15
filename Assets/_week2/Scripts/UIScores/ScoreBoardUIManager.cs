@@ -67,16 +67,16 @@
 //         label.text = ""+playerScore.kills;
 //     }
 // }
-// public class PlayerScore
-// {
-//     public string playerName;
-//     public int kills;
-//     public int deaths;
+// // public class PlayerScore
+// // {
+// //     public string playerName;
+// //     public int kills;
+// //     public int deaths;
 
-//     public PlayerScore(string pName, int kill, int death)
-//     {
-//         playerName = pName;
-//         kills = kill;
-//         deaths = death;
-//     }
-// }
+// //     public PlayerScore(string pName, int kill, int death)
+// //     {
+// //         playerName = pName;
+// //         kills = kill;
+// //         deaths = death;
+// //     }
+// // }
