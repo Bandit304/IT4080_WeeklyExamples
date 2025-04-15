@@ -27,7 +27,7 @@ partial class ScoreBoardSystem : SystemBase
     {
         if (uiObject == null)
         {
-            Debug.LogWarning("No UIManager, searching");
+            // Debug.LogWarning("No UIManager, searching");
             uiObject = GameObject.FindWithTag("UIScoreManager");
         }
         if (uiObject != null && uiDocument == null)
